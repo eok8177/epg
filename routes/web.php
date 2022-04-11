@@ -27,6 +27,13 @@ Route::group([
     'roles' =>['user','admin']
 ], function() {
     Route::get('home', function () {
-        return view('cabinet');
+        return view('cabinet',[
+            'client_id'=>auth()->user()->id
+        ]);
+    });
+    Route::get('/home/chanel/{chanel}', function () {
+        return view('cabinet',[
+            'client_id'=>auth()->user()->id
+        ]);
     });
 });

@@ -1,38 +1,31 @@
-@extends('app')
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
-@section('content')
+  <head>
+    <title>{{$title ?? env('APP_NAME')}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
 
+    {{-- CSRF Token --}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="client-id" content="{{$client_id ?? 'null'}}">
+    <meta name="client-token" content="{{$client_token ?? 'null'}}">
 
-  <h1 class="text-center">User Cabinet</h1>
+    <link rel="stylesheet" type="text/css" href="/css/app.css?v={{env('ASSETS')}}" />
 
-  <div class="container">
+    @stack('styles')
 
-    <h5>08/04/2022</h5>
+  </head>
+  <body>
 
-    <hr>
-    
-    <div class="row">
-      <div class="col-sm-3">
-        <input type="time" name="time" class="form-control mb-2" required>
-      </div>
-      <div class="col-sm-4">
-        <input type="text" class="form-control mb-2" placeholder="Title">
-      </div>
-      <div class="col-sm-5">
-        <input type="text" class="form-control mb-2" placeholder="Desription">
-      </div>
+    <div id="app">
+      <h1 class="text-center">Медленный интернет</h1>
+      <h2 class="text-center">Перезагрузите страницу</h2>
     </div>
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+        @csrf
+    </form>
 
-    <hr>
-    <button type="button" class="btn btn-sm btn-outline-secondary">add next</button>
-
-  </div>
-
-
-@endsection
-
-@push('styles')
-<style>
-
-</style>
-@endpush
+    <script src="{{ asset('js/cabinet.js') }}?v={{env('ASSETS')}}"></script>
+  </body>
+</html>

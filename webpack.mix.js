@@ -20,6 +20,8 @@ mix.js('resources/js/app.js', 'public/js')
     //     //
     // ])
     .sass('resources/css/app.scss', 'public/css')
+
+    .js('resources/js/cabinet.js', 'public/js').vue()
 ;
 
 
