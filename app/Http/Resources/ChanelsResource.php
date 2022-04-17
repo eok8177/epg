@@ -16,8 +16,9 @@ class ChanelsResource extends JsonResource
     {
         return [
             "id" => $this->id,
-            "name" => $this->name,
+            "chanel_id" => $this->chanel_id,
             "title" => $this->title,
+            "has_programs" => $this->programs()->count() > 0
         ];
     }
 }

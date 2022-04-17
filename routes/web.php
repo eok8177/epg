@@ -22,18 +22,20 @@ Route::get('/', function () {
 Route::group([
     'as' => 'user.',
     'namespace' => 'User',
-    // 'prefix' => 'user',
-    'middleware' => ['roles', 'verified'],
+    // 'middleware' => ['roles', 'verified'],
+    'middleware' => ['roles'],
     'roles' =>['user','admin']
 ], function() {
     Route::get('home', function () {
         return view('cabinet',[
-            'client_id'=>auth()->user()->id
+            'client_id'=>auth()->user()->id,
+            'client_token'=>auth()->user()->token
         ]);
     });
     Route::get('/home/chanel/{chanel}', function () {
         return view('cabinet',[
-            'client_id'=>auth()->user()->id
+            'client_id'=>auth()->user()->id,
+            'client_token'=>auth()->user()->token
         ]);
     });
 });

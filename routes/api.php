@@ -23,4 +23,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/chanels', [ChanelController::class, 'chanels']);
 Route::post('/chanel/{chanel}', [ChanelController::class, 'chanel']);
+Route::post('/save-chanel', [ChanelController::class, 'saveChanel']);
+Route::post('/save-program/{chanel}', [ChanelController::class, 'saveProgram']);
+Route::post('/delete-chanel/{chanel}', [ChanelController::class, 'deleteChanel']);
+Route::post('/delete-program/{program}', [ChanelController::class, 'deleteProgram']);
+
+Route::post('/export-chanel/{chanel}', [ChanelController::class, 'exportChanel']);
 

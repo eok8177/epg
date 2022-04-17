@@ -5,17 +5,21 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
+use App\Models\User;
 use App\Models\Chanel;
 use App\Models\Program;
 
 use App\Http\Resources\ChanelsResource;
 use App\Http\Resources\ChanelResource;
+use App\Http\Resources\ProgramResource;
 
 class ChanelController extends Controller
 {
     public function chanels(Request $request)
     {
-        $chanels = Chanel::all();
+        $user = $this->auth($request);
+
+        $chanels = Chanel::where('user_id',$user->id)->get();
 
         $data = ChanelsResource::collection($chanels)->response()->getData(true);
 
@@ -24,11 +28,66 @@ class ChanelController extends Controller
 
     public function chanel(Request $request, Chanel $chanel)
     {
-        $data = new ChanelResource($chanel);
+        $user = $this->auth($request);
+        if ($chanel->user_id != $user->id) abort('404');
 
-        // $data['date'] = time();
-// dd($data);
-        return response()->json($data, 200);
+        return response()->json(new ChanelResource($chanel), 200);
+    }
+
+    public function saveChanel(Request $request)
+    {
+        $user = $this->auth($request);
+        $chanel = Chanel::addOrUpdate($user, $request);
+        return response()->json(new ChanelResource($chanel), 200);
+    }
+
+
+    public function saveProgram(Request $request, Chanel $chanel)
+    {
+        if ($request->get('start') > 0) {
+            $program = Program::addOrUpdate($chanel, $request);
+            return response()->json(new ProgramResource($program), 200);
+        }
+
+        return response()->json($request->all(), 200);
+    }
+
+
+    public function deleteChanel(Request $request, Chanel $chanel)
+    {
+        $chanel->programs()->delete();
+        $chanel->delete();
+        return true;
+    }
+
+    public function deleteProgram(Request $request, Program $program)
+    {
+        $program->deleteProgram();
+        return response()->json($program, 200);
+    }
+
+
+
+    public function exportChanel(Request $request, Chanel $chanel)
+    {
+        $chanel->exportXML();
+        return true;
+    }
+
+
+
+    private function auth($request)
+    {
+        $token = $request->header('Authorization');
+        $id = $request->header('Client');
+        $client = User::where('id',$id)
+            ->where('token',$token)
+            ->first();
+
+        if (!$client) {
+            exit(); //404
+        }
+        return $client;
     }
 
 }

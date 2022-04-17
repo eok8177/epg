@@ -14,12 +14,15 @@ class ChanelResource extends JsonResource
      */
     public function toArray($request)
     {
+        $start_date = $request->get('date', $this->lastDateFiled());
+
         return [
             "id" => $this->id,
-            "name" => $this->name,
+            "chanel_id" => $this->chanel_id,
             "title" => $this->title,
-            "date" => $request->get('date', strtotime('today midnight')),
-            "programs" => ProgramResource::collection($this->programs),
+            "date" => $start_date,
+            'has_prev' => $this->hasPrev($start_date),
+            "programs" => ProgramResource::collection($this->todayPrograms($start_date)),
         ];
     }
 }
