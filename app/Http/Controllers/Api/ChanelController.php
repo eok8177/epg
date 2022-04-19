@@ -21,9 +21,7 @@ class ChanelController extends Controller
 
         $chanels = Chanel::where('user_id',$user->id)->get();
 
-        $data = ChanelsResource::collection($chanels)->response()->getData(true);
-
-        return response()->json($data['data'], 200);
+        return response()->json(new ChanelsResource($chanels), 200);
     }
 
     public function chanel(Request $request, Chanel $chanel)

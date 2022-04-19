@@ -21,13 +21,13 @@ class Program extends Model
         ]);
         $program->update($request->all());
 
-        $prevProgram = Program::where('start','<',$program->start)->orderBy('start','desc')->first();
+        $prevProgram = Program::where('start','<',$program->start)->where('chanel_id',$chanel->id)->orderBy('start','desc')->first();
         if ($prevProgram) {
             $prevProgram->stop = $program->start;
             $prevProgram->save();
         }
 
-        $nextProgram = Program::where('start','>',$program->start)->orderBy('start','asc')->first();
+        $nextProgram = Program::where('start','>',$program->start)->where('chanel_id',$chanel->id)->orderBy('start','asc')->first();
         if ($nextProgram) {
             $program->stop = $nextProgram->start;
             $program->save();
@@ -39,8 +39,8 @@ class Program extends Model
     public function deleteProgram()
     {
 
-        $prevProgram = Program::where('start','<',$this->start)->orderBy('start','desc')->first();
-        $nextProgram = Program::where('start','>',$this->start)->orderBy('start','asc')->first();
+        $prevProgram = Program::where('start','<',$this->start)->where('chanel_id',$this->chanel_id)->orderBy('start','desc')->first();
+        $nextProgram = Program::where('start','>',$this->start)->where('chanel_id',$this->chanel_id)->orderBy('start','asc')->first();
 
         if ($prevProgram && $nextProgram) {
             $prevProgram->stop = $nextProgram->start;

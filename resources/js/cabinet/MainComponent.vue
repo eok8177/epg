@@ -9,10 +9,21 @@
         >Add new channel</button>
       </div>
 
+      <div class="row" v-if="chanels.length > 0">
+        <div class="col-6 col-sm-4">
+          <b>Title</b>
+        </div>
+        <div class="col-4 col-sm-3">
+          <b>Channel ID</b>
+        </div>
+        <div class="col-2 col-sm-2">
+          <b>GMT</b>
+        </div>
+      </div>
 
       <div v-for="chanel, index in chanels" class="row mb-3">
 
-          <div class="col-4">
+          <div class="col-6 col-sm-4 mb-2">
             <input type="text" class="form-control form-control-sm"
               placeholder="Title"
               :readonly="!chanel.edit"
@@ -20,7 +31,7 @@
               ref="items"
             >
           </div>
-          <div class="col-5">
+          <div class="col-4 col-sm-3 mb-2">
             <input type="text" class="form-control form-control-sm"
               placeholder="ID" 
               :readonly="!chanel.edit"
@@ -28,11 +39,20 @@
             >
           </div>
 
-          <div class="col-3 text-end">
+          <div class="col-2 col-sm-2 mb-2">
+            <select class="form-select form-select-sm"
+              :disabled="!chanel.edit"
+              v-model="chanel.offset"
+            >
+              <option v-for="offset, value in offsets" :value="value">{{offset}}</option>
+            </select>
+          </div>
+
+          <div class="col-12 col-sm-3 text-end mb-1">
             <router-link class="btn btn-sm btn-outline-primary me-1"
               v-if="!chanel.edit"
               :to="{ name: 'Chanel', params: {chanel: chanel.id}}"
-            >Open</router-link>
+            >Programs</router-link>
             <button type="button" class="btn btn-sm btn-outline-success me-1"
               v-if="chanel.edit"
               @click="saveChanel(index)"
@@ -46,7 +66,7 @@
             >X</button>
           </div>
 
-          <div class="col-12 d-flex justify-content-between mt-1" v-if="chanel.has_programs">
+          <div class="col-12 col-sm-12 d-flex justify-content-between mb-2" v-if="chanel.has_programs">
             <div>
               <a :href="'/epg/'+chanel.id+'_'+chanel.chanel_id+'.xml'" target="_blank" class="text-secondary">{{ domain() +'/epg/'+chanel.id+'_'+chanel.chanel_id+'.xml'}}</a>
             </div>
@@ -71,13 +91,17 @@
   export default {
     data: () => ({
       chanels: {},
+      offsets: {},
 
       loading: false,
+      offset: Number,
     }),
     methods: {
       async getChanels() {
         this.loading = true;
-        this.chanels = await api.getChanels();
+        let res = await api.getChanels();
+        this.chanels = res.data;
+        this.offsets = res.offsets
         this.loading = false;
       },
 
@@ -109,6 +133,7 @@
           id: '',
           chanel_id: '',
           title: '',
+          offset: this.offset,
           edit: true,
         });
         this.focusLastInput();
@@ -130,6 +155,7 @@
     },
     created() {
       this.getChanels();
+      this.offset = new Date().getTimezoneOffset();
     },
     mounted() {}
   }

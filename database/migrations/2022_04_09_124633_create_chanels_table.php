@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('user_id');
             $table->string('chanel_id')->nullable();
             $table->string('title')->nullable();
+            $table->integer('offset')->default(0);
             $table->timestamps();
         });
     }

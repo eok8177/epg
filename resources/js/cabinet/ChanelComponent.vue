@@ -19,6 +19,13 @@
 
       <hr>
 
+      <div class="row mb-2" v-if="chanel.programs.length > 0">
+        <div class="col-md-2 col-5"><b>Time</b></div>
+        <div class="col-md-4 col-7"><b>Title</b></div>
+        <div class="col-md-5 col-10"><b>Description</b></div>
+        <div class="col-md-1 col-2"></div>
+      </div>
+
       <div class="row" v-for="program, index in chanel.programs">
         <input type="hidden" v-model="program.id">
         <div class="col-md-2 col-5">

@@ -79,10 +79,13 @@ class Chanel extends Model
         $i = 0;
         foreach ($programs as $program) {
 
+          $start = gmdate('YmdHis', $program->start + $this->offset*60 );
+          $stop = gmdate('YmdHis', $program->stop + $this->offset*60 );
+
           $xmlWriter->startElement('programme');
           $xmlWriter->writeAttribute('channel', $this->chanel_id);
-          $xmlWriter->writeAttribute('start', $program->start.' +0000');
-          $xmlWriter->writeAttribute('stop',  $program->stop.' +0000');
+          $xmlWriter->writeAttribute('start', $start.' +0000');
+          $xmlWriter->writeAttribute('stop',  $stop.' +0000');
 
 
             $xmlWriter->startElement('title');

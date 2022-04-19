@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ChanelResource extends JsonResource
+class ChanelWithoutProgramsResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,16 +14,12 @@ class ChanelResource extends JsonResource
      */
     public function toArray($request)
     {
-        $start_date = $request->get('date', $this->lastDateFiled());
-
         return [
             "id" => $this->id,
             "chanel_id" => $this->chanel_id,
             "title" => $this->title,
-            "date" => $start_date,
             "offset" => $this->offset,
-            'has_prev' => $this->hasPrev($start_date),
-            "programs" => ProgramResource::collection($this->todayPrograms($start_date)),
+            "has_programs" => $this->programs()->count() > 0
         ];
     }
 }
