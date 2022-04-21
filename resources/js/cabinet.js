@@ -8,7 +8,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 import App     from './cabinet/App.vue';
 import Main    from './cabinet/MainComponent.vue';
-import Chanel from './cabinet/ChanelComponent.vue';
+import Chanel  from './cabinet/ChanelComponent.vue';
+import Profile from './cabinet/ProfileComponent.vue';
 
 const routes = [
   {
@@ -21,6 +22,11 @@ const routes = [
     name: "Chanel",
     component: Chanel,
     props: true,
+  },
+  {
+    path: '/home/profile',
+    name: "Profile",
+    component: Profile,
   },
 
 ];

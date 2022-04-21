@@ -32,10 +32,10 @@ Route::group([
             'client_token'=>auth()->user()->token
         ]);
     });
-    Route::get('/home/chanel/{chanel}', function () {
+    Route::get('home/{any}', function () {
         return view('cabinet',[
             'client_id'=>auth()->user()->id,
             'client_token'=>auth()->user()->token
         ]);
-    });
+    })->where('any', '.*');
 });

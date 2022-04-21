@@ -56,6 +56,17 @@ const api = {
         }
     },
 
+    changePassword: async(password) => {
+        try {
+            let res = await HTTP.post('update-client/', {
+                password: password
+            });
+            return res.data;
+        } catch (error) {
+            console.log('changePassword: '+ error);
+        }
+    },
+
 
     deleteProgram: async(program) => {
         try {
