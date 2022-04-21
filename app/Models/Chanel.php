@@ -55,7 +55,13 @@ class Chanel extends Model
 
     public function exportXML($cron = false)
     {
-        $programs = $this->programs()->where('stop','>',0)->orderBy('start','asc')->get();
+        $from_date = strtotime('-15 days');
+
+        $programs = $this->programs()
+            ->where('stop','>',0)
+            ->where('start','>=',$from_date)
+            ->orderBy('start','asc')
+            ->get();
 
         file_put_contents('epg/'.$this->id.'_'.$this->chanel_id.'.xml', '');
 
