@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 
 use App\Models\User;
 
+use App\Library\ExportXML;
+
 class ClientController extends Controller
 {
     public function update(Request $request)
@@ -18,6 +20,15 @@ class ClientController extends Controller
         $user->save();
 
         return response()->json(['status'=>'OK'], 200);
+    }
+
+
+
+    public function exportAllChanels(Request $request)
+    {
+        $user = $this->auth($request);
+
+        return ExportXML::exportAllXML($user);
     }
 
 

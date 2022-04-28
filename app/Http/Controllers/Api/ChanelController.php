@@ -13,6 +13,8 @@ use App\Http\Resources\ChanelsResource;
 use App\Http\Resources\ChanelResource;
 use App\Http\Resources\ProgramResource;
 
+use App\Library\ExportXML;
+
 class ChanelController extends Controller
 {
     public function chanels(Request $request)
@@ -69,8 +71,7 @@ class ChanelController extends Controller
 
     public function exportChanel(Request $request, Chanel $chanel)
     {
-        $chanel->exportXML();
-        return true;
+        return ExportXML::exportXML($chanel);
     }
 
 

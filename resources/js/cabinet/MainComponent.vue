@@ -68,15 +68,32 @@
 
           <div class="col-12 col-sm-12 d-flex justify-content-between mb-2" v-if="chanel.has_programs">
             <div>
-              <a :href="'/epg/'+chanel.id+'_'+chanel.chanel_id+'.xml'" target="_blank" class="text-secondary">{{ domain() +'/epg/'+chanel.id+'_'+chanel.chanel_id+'.xml'}}</a>
+              <a target="_blank" class="text-secondary"
+                v-if="chanel.link"
+                :href="chanel.link"
+              >{{chanel.link}}</a>
             </div>
             <button type="button" class="btn btn-sm btn-outline-secondary"
               v-if="chanel.has_programs"
               @click="exportChanel(index)"
+              :disabled="loading"
             >create XML file</button>
           </div>
 
 
+      </div>
+
+      <div v-if="chanels.length > 1">
+        <hr>
+        <p>Create one XML file for all channels:
+          <button type="button" class="btn btn-sm btn-outline-secondary"
+            @click="exportAllChanels()"
+            :disabled="loading"
+          >create XML file</button>
+        </p>
+        <div v-if="linkAll">
+          <a :href="linkAll" target="_blank" class="text-secondary">{{linkAll}}</a>
+        </div>
       </div>
 
     </div>
@@ -90,8 +107,9 @@
 
   export default {
     data: () => ({
-      chanels: {},
+      chanels: [],
       offsets: {},
+      linkAll: '',
 
       loading: false,
       offset: Number,
@@ -123,7 +141,15 @@
 
       async exportChanel(index) {
         this.loading = true;
-        await api.exportChanel(this.chanels[index].id);
+        let link = await api.exportChanel(this.chanels[index].id);
+        this.chanels[index].link = window.location.origin + '/' + link;
+        this.loading = false;
+      },
+
+      async exportAllChanels() {
+        this.loading = true;
+        let link = await api.exportAllChanels();
+        this.linkAll = window.location.origin + '/' + link;
         this.loading = false;
       },
 
@@ -147,9 +173,6 @@
         });
       },
 
-      domain() {
-        return window.location.origin;
-      }
 
 
     },

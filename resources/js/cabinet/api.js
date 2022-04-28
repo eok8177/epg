@@ -97,6 +97,15 @@ const api = {
         }
     },
 
+    exportAllChanels: async() => {
+        try {
+            let res = await HTTP.post('export-all-chanels');
+            return res.data;
+        } catch (error) {
+            console.log('exportAllChanels: '+ error);
+        }
+    },
+
 
 }
 
