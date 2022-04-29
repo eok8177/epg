@@ -46,7 +46,6 @@ class ChanelController extends Controller
     {
         if ($request->get('start') > 0) {
             $program = Program::addOrUpdate($chanel, $request);
-            ExportXML::exportXML($chanel);
             return response()->json(new ProgramResource($program), 200);
         }
 

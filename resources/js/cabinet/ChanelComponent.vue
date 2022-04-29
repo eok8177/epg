@@ -118,9 +118,17 @@
         this.loading = false;
       },
 
+      async exportChanel() {
+        this.loading = true;
+        let link = await api.exportChanel(this.chanelID);
+        this.loading = false;
+      },
+
       addProgram() {
 
         if (!this.checkInputDate()) return;
+
+        this.exportChanel();
 
         this.chanel.programs.push({
           id: '',
@@ -208,7 +216,10 @@
       this.chanelID = this.$route.params.chanel;
       this.getChanel();
     },
-    mounted() {}
+    mounted() {},
+    beforeUnmount() {
+      this.exportChanel();
+    }
   }
 </script>
 
