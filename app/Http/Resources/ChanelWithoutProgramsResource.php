@@ -19,6 +19,7 @@ class ChanelWithoutProgramsResource extends JsonResource
             "chanel_id" => $this->chanel_id,
             "title" => $this->title,
             "offset" => $this->offset,
+            "cron" => (bool) $this->cron,
             "has_programs" => $this->programs()->count() > 0
         ];
     }

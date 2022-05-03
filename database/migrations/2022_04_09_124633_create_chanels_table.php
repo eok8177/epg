@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('chanel_id')->nullable();
             $table->string('title')->nullable();
             $table->integer('offset')->default(0);
+            $table->boolean('cron')->default(0);
+            $table->timestamp('cron_run_at')->nullable();
             $table->timestamps();
         });
     }

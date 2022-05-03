@@ -40,12 +40,23 @@
           </div>
 
           <div class="col-2 col-sm-2 mb-2">
-            <select class="form-select form-select-sm"
-              :disabled="!chanel.edit"
-              v-model="chanel.offset"
-            >
-              <option v-for="offset, value in offsets" :value="value">{{offset}}</option>
-            </select>
+            <div class="input-group">
+              <select class="form-select form-select-sm"
+                :disabled="!chanel.edit"
+                v-model="chanel.offset"
+              >
+                <option v-for="offset, value in offsets" :value="value">{{offset}}</option>
+              </select>
+
+              <div class="form-check ms-2">
+                <input class="form-check-input" type="checkbox" 
+                  :id="'cron_'+index"
+                  :disabled="!chanel.edit"
+                  v-model="chanel.cron"
+                >
+                <label class="form-check-label" :for="'cron_'+index">Cron</label>
+              </div>
+            </div>
           </div>
 
           <div class="col-12 col-sm-3 text-end mb-1">

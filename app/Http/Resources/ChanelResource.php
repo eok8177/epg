@@ -22,6 +22,7 @@ class ChanelResource extends JsonResource
             "title" => $this->title,
             "date" => $start_date,
             "offset" => $this->offset,
+            "cron" => (bool) $this->cron,
             'has_prev' => $this->hasPrev($start_date),
             "programs" => ProgramResource::collection($this->todayPrograms($start_date)),
         ];
