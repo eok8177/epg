@@ -80,13 +80,14 @@
       },
 
       loading: false,
+      timeError: false,
     }),
     computed: {
       disablePrevBtn() {
-        return this.loading || !this.chanel.has_prev;
+        return this.loading || !this.chanel.has_prev || this.timeError;
       },
       disableNextBtn() {
-        return this.loading || this.chanel.programs.length < 1;
+        return this.loading || this.chanel.programs.length < 1 || this.timeError;
       },
       todayDate() {
         return this.getDate(this.chanel.date);
@@ -141,13 +142,17 @@
       },
 
       onChangeTime(index, event) {
+        this.timeError = false;
         let time = event.target.value;
         let arr = time.split(':');
         let start = this.chanel.date + arr[0]*60*60 + arr[1]*60;
         this.chanel.programs[index].start = start;
         // console.log(arr + start)
 
-        if (!this.checkInputDate(index, true)) return;
+        if (!this.checkInputDate(index, true)) {
+          this.timeError = true;
+          return;
+        }
 
         this.saveProgram(index);
       },
