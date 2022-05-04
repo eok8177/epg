@@ -50,6 +50,63 @@ class Chanel extends Model
     }
 
 
+    public static function nextDayCommand()
+    {
+        $one_day = 60*60*24;
+
+        $chanels = Chanel::where('cron', 1)
+            ->where(function ($q) {
+                $q->orWhere('cron_run_at','<', date('Y-m-d H:i:s',strtotime('-23 hours')) );
+                $q->orWhereNull('cron_run_at');
+            })
+            ->get();
+
+        foreach ($chanels as $chanel) {
+
+            $programs = self::searchLastPrograms($chanel);
+
+            $last_index = $programs->count() - 1;
+
+            // Duplicate records
+            foreach ($programs as $index => $program) {
+                $newProgram = $program->replicate();
+                $newProgram->start = $newProgram->start + $one_day;
+                $newProgram->stop = $newProgram->stop ? $newProgram->stop + $one_day : NULL;
+                $newProgram->save();
+                if ($index == 0) {
+                    $first_start = $newProgram->start;
+                }
+                if ($index == $last_index) {
+                    $program->stop = $first_start;
+                    $program->save();
+                }
+            }
+
+            $chanel->cron_run_at = date('Y-m-d H:i:s');
+            $chanel->save();
+        }
+
+        return true;
+    }
+
+    private static function searchLastPrograms($chanel)
+    {
+        // TODO get only last day
+        // maybe compare last record start time ?
+        $start_time = strtotime('today midnight');
+        $one_day = 60*60*24;
+
+        for ($i=0; $i <20 ; $i++) {
+
+            $programs = $chanel->programs()
+                ->where('start','>=',$start_time)
+                ->orderBy('start','asc')
+                ->get();
+            if ($programs->count() > 0) return $programs;
+            $start_time = $start_time - $one_day;
+        }
+        return $programs;
+    }
 
 
 }
