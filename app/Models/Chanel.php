@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Library\ExportXML;
+
 class Chanel extends Model
 {
     protected $guarded = ['id'];
@@ -84,6 +86,7 @@ class Chanel extends Model
 
             $chanel->cron_run_at = date('Y-m-d H:i:s');
             $chanel->save();
+            ExportXML::exportXML($chanel);
         }
 
         return true;

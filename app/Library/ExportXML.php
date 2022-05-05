@@ -3,6 +3,7 @@
 namespace App\Library;
 
 use PhpOffice\PhpSpreadsheet\Shared\XMLWriter;
+use Illuminate\Support\Facades\Storage;
 
 class ExportXML
 {
@@ -65,13 +66,13 @@ class ExportXML
 
     private static function generateXML($chanels, $filename)
     {
-        file_put_contents('epg/'.$filename, '');
-
         $xmlWriter = new XMLWriter();
         $xmlWriter->openMemory();
         $xmlWriter->startDocument('1.0', 'UTF-8');
         $xmlWriter->startDtd('tv', 'SYSTEM', 'xmltv.dtd');
         $xmlWriter->endDtd();
+
+        Storage::disk('public')->put('epg/'.$filename, $xmlWriter->flush(true));
 
         $xmlWriter->startElement('tv');
         $xmlWriter->writeAttribute('generator-info-name', 'epg-gen');
@@ -112,7 +113,7 @@ class ExportXML
 
               // Flush XML in memory to file every 1000 iterations
               if (0 == $i%1000) {
-                  file_put_contents('epg/'.$filename, $xmlWriter->flush(true), FILE_APPEND);
+                Storage::disk('public')->append('epg/'.$filename,  $xmlWriter->flush(true));
               }
               $i++;
             }
@@ -122,7 +123,7 @@ class ExportXML
         $xmlWriter->endElement(); // tv
 
         // Final flush to make sure we haven't missed anything
-        file_put_contents('epg/'.$filename, $xmlWriter->flush(true), FILE_APPEND);
+        Storage::disk('public')->append('epg/'.$filename,  $xmlWriter->flush(true));
 
         return;
     }
