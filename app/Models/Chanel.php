@@ -19,7 +19,7 @@ class Chanel extends Model
     {
         return $this->programs
             ->where('start', '>=', $start_date)
-            ->where('start', '<=', $start_date + 60*60*24);
+            ->where('start', '<', $start_date + 60*60*24);
     }
 
     public function hasPrev($start_date)
