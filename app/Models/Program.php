@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Library\ExportXML;
 
 class Program extends Model
 {
@@ -32,6 +33,8 @@ class Program extends Model
             $program->stop = $nextProgram->start;
             $program->save();
         }
+
+        ExportXML::exportAllXML($chanel->user);
 
         return $program;
     }
