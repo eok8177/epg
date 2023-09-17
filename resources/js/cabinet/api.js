@@ -13,13 +13,11 @@ const HTTP = axios.create({
 
 const api = {
 
-    getChanels: async(id) => {
+    getChanels: async() => {
         try {
             let res = await HTTP.post('chanels');
             return res.data;
-        } catch (error) {
-            console.log('getChanels: '+ error);
-        }
+        } catch (error) {console.log('getChanels: '+ error)}
     },
 
     getChanel: async(id, date) => {
@@ -32,9 +30,7 @@ const api = {
         try {
             let res = await HTTP.post('chanel/'+id, data);
             return res.data;
-        } catch (error) {
-            console.log('getChanel: '+ error);
-        }
+        } catch (error) {console.log('getChanel: '+ error)}
     },
 
 
@@ -42,18 +38,14 @@ const api = {
         try {
             let res = await HTTP.post('save-chanel', data);
             return res.data;
-        } catch (error) {
-            console.log('saveChanel: '+ error);
-        }
+        } catch (error) {console.log('saveChanel: '+ error)}
     },
 
     saveProgram: async(data, chanel) => {
         try {
             let res = await HTTP.post('save-program/'+chanel, data);
             return res.data;
-        } catch (error) {
-            console.log('saveProgram: '+ error);
-        }
+        } catch (error) {console.log('saveProgram: '+ error)}
     },
 
     changePassword: async(password) => {
@@ -62,9 +54,7 @@ const api = {
                 password: password
             });
             return res.data;
-        } catch (error) {
-            console.log('changePassword: '+ error);
-        }
+        } catch (error) {console.log('changePassword: '+ error)}
     },
 
 
@@ -72,18 +62,14 @@ const api = {
         try {
             let res = await HTTP.post('delete-program/'+program);
             return res.data;
-        } catch (error) {
-            console.log('deleteProgram: '+ error);
-        }
+        } catch (error) {console.log('deleteProgram: '+ error)}
     },
 
     deleteChanel: async(chanel) => {
         try {
             let res = await HTTP.post('delete-chanel/'+chanel);
             return res.data;
-        } catch (error) {
-            console.log('deleteChanel: '+ error);
-        }
+        } catch (error) {console.log('deleteChanel: '+ error)}
     },
 
 
@@ -92,18 +78,32 @@ const api = {
         try {
             let res = await HTTP.post('export-chanel/'+chanel);
             return res.data;
-        } catch (error) {
-            console.log('exportChanel: '+ error);
-        }
+        } catch (error) {console.log('exportChanel: '+ error)}
     },
 
     exportAllChanels: async() => {
         try {
             let res = await HTTP.post('export-all-chanels');
             return res.data;
-        } catch (error) {
-            console.log('exportAllChanels: '+ error);
-        }
+        } catch (error) {console.log('exportAllChanels: '+ error)}
+    },
+
+    uploadFile: async(data) => {
+        try {
+            let formData = new FormData();
+            formData.append('file', data.file);
+            formData.append('chanel', data.chanel);
+
+            let res = await HTTP.post('upload-file', formData);
+            return res.data;
+        } catch (error) {console.log('exportAllChanels: '+ error)}
+    },
+
+    parseFile: async(data) => {
+        try {
+            let res = await HTTP.post('parse-file', data);
+            return res.data;
+        } catch (error) {console.log('parseFile: '+ error)}
     },
 
 

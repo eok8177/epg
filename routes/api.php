@@ -34,3 +34,5 @@ Route::post('/delete-program/{program}', [ChanelController::class, 'deleteProgra
 Route::post('/export-chanel/{chanel}', [ChanelController::class, 'exportChanel']);
 Route::post('/export-all-chanels', [ClientController::class, 'exportAllChanels']);
 
+Route::post('/upload-file', [ChanelController::class, 'uploadFile']);
+Route::post('/parse-file', [ChanelController::class, 'parseFile']);
