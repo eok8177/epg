@@ -243,7 +243,13 @@ export default {
       this.$refs.file.value = '';
       this.filename = res.filename;
       this.fields = res.fields;
-      this.select = this.xls_rows[0].map(i=>{return 'skip'}),
+      this.select = this.xls_rows[0].map((i,key)=>{
+        if(key == 0) return 'date';
+        if(key == 1) return 'time';
+        if(key == 2) return 'title';
+        if(key == 3) return 'description';
+        return 'skip';
+      }),
       this.show_import_popup = true;
       this.parsed = false;
     },

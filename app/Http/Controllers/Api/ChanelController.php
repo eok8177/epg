@@ -104,9 +104,18 @@ class ChanelController extends Controller
         );
 
         $collection = (new SelectImport)->toCollection('tmp/'.$filename, 'public');
+        $table = $collection[0]->take(15);
+
+        $table = $table->map(function($item) {
+            $item = $item->slice(0, 5);
+            if(!is_string($item[0]) && $item[0] > 0) {
+                $item[0] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[0])->format('d.m.Y');
+            }
+            return $item;
+        });
 
         return response()->json([
-            'table' => $collection[0]->take(5),
+            'table' => $table,
             'filename' => $filename,
             'fields' => $this->fields,
         ],200);
@@ -123,11 +132,14 @@ class ChanelController extends Controller
         foreach ($collection[0] as $r_id => $row) {
             $data = [];
             foreach ($row as $col_id => $col) {
-                if (array_key_exists($select[$col_id], $this->fields)) {
+                if (array_key_exists($col_id, $select) && array_key_exists($select[$col_id], $this->fields)) {
                     $data[$select[$col_id]] = $col;
                 }
             }
             if(array_key_exists('date', $data) && array_key_exists('time', $data) && array_key_exists('title', $data)) {
+                if(!is_string($data['date']) && $data['date'] > 0) {
+                    $data['date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($data['date'])->format('d.m.Y');
+                }
                 $rows[] = [
                     'start' => strtotime($data['date'].' '.$data['time']),
                     'title' => $data['title'],
