@@ -111,6 +111,9 @@ class ChanelController extends Controller
             if(!is_string($item[0]) && $item[0] > 0) {
                 $item[0] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[0])->format('d.m.Y');
             }
+            if(!is_string($item[1])) {
+                $item[1] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($item[1])->format('H:i');
+            }
             return $item;
         });
 
@@ -140,10 +143,13 @@ class ChanelController extends Controller
                 if(!is_string($data['date']) && $data['date'] > 0) {
                     $data['date'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($data['date'])->format('d.m.Y');
                 }
+                if(!is_string($data['time'])) {
+                    $data['time'] = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($data['time'])->format('H:i');
+                }
                 $rows[] = [
                     'start' => strtotime($data['date'].' '.$data['time']),
                     'title' => $data['title'],
-                    'description' => $data['description'],
+                    'description' => array_key_exists('description', $data) ? $data['description'] : NULL,
                 ];
             }
         }
